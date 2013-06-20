@@ -1,4 +1,4 @@
-#pong game ver. Alpha 0.01
+#pong game ver. Alpha 0.02
 #Alec Matthews
 
 import pygame, sys, random
@@ -12,6 +12,10 @@ def ballDirection():
 def randBounce():
      bounceSpeed = random.randint(0, 6)
      return bounceSpeed
+
+def randSpeed():
+     speed = random.randint(-1, 6)
+     return speed
 
 
 pygame.init()
@@ -41,6 +45,8 @@ UPRIGHT = 9
 DOWNRIGHT = 3
 
 MOVESPEED = 6
+
+BALLSPEED = 10
 
 bounce = None
 
@@ -105,24 +111,24 @@ while True:
                ball['dir'] = UPRIGHT
           
      if ball['dir'] == LEFT:
-          ball['rect'].left -= MOVESPEED
+          ball['rect'].left -= BALLSPEED
      if ball['dir'] == RIGHT:
-          ball['rect'].left += MOVESPEED
+          ball['rect'].left += BALLSPEED
      if ball['dir'] == UPRIGHT:
           bounce = randBounce()
-          ball['rect'].left += MOVESPEED
+          ball['rect'].left += BALLSPEED
           ball['rect'].top -= bounce
      if ball['dir'] == UPLEFT:
           bounce = randBounce()
-          ball['rect'].left -= MOVESPEED
+          ball['rect'].left -= BALLSPEED
           ball['rect'].top -= bounce
      if ball['dir'] == DOWNRIGHT:
           bounce = randBounce()
-          ball['rect'].left += MOVESPEED
+          ball['rect'].left += BALLSPEED
           ball['rect'].top += bounce
      if ball['dir'] == DOWNLEFT:
           bounce = randBounce()
-          ball['rect'].left -= MOVESPEED
+          ball['rect'].left -= BALLSPEED
           ball['rect'].top += bounce
      
      if ball['rect'].left < 0:
@@ -151,8 +157,15 @@ while True:
           elif ballLeft == False:
                ball['dir'] = RIGHT
                
-     if paddleComp.bottom < WINDOWHEIGHT or paddleComp.top > 0:
-          paddleComp.centery = ball['rect'].centery 
+     if paddleComp.bottom < WINDOWHEIGHT:
+          if paddleComp.centery < ball['rect'].centery:
+               speed = randSpeed()
+               paddleComp.centery += speed
+     if paddleComp.top > 0:
+          if paddleComp.centery > ball['rect'].centery:
+               speedTwo = randSpeed()
+               paddleComp.centery -= speedTwo
+     print(speed)
 
      pygame.draw.rect(windowSurface, WHITE, paddlePlayer)
      pygame.draw.rect(windowSurface, WHITE, paddleComp)
