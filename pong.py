@@ -9,6 +9,11 @@ def ballDirection():
      direction = random.randint(0,1)
      return direction
 
+def randBounce():
+     bounceSpeed = random.randint(0, 6)
+     return bounceSpeed
+
+
 pygame.init()
 mainClock = pygame.time.Clock()
 
@@ -36,6 +41,8 @@ UPRIGHT = 9
 DOWNRIGHT = 3
 
 MOVESPEED = 6
+
+bounce = None
 
 direction = ballDirection()
 
@@ -81,22 +88,71 @@ while True:
         
      
      if ball['rect'].colliderect(paddlePlayer):
-          ball['dir'] = RIGHT
+          ball['dir'] = UPRIGHT
 
      if ball['rect'].colliderect(paddleComp):
-          ball['dir'] = LEFT
+          ball['dir'] = DOWNLEFT
+          
+     if ball['rect'].top < 0:
+          if ball['dir'] == UPLEFT:
+               ball['dir'] = DOWNLEFT
+          elif ball['dir'] == UPRIGHT:
+               ball['dir'] = DOWNRIGHT
+     if ball['rect'].bottom > WINDOWHEIGHT:
+          if ball['dir'] == DOWNLEFT:
+               ball['dir'] = UPLEFT
+          elif ball['dir'] == DOWNRIGHT:
+               ball['dir'] = UPRIGHT
           
      if ball['dir'] == LEFT:
           ball['rect'].left -= MOVESPEED
      if ball['dir'] == RIGHT:
           ball['rect'].left += MOVESPEED
-
-
+     if ball['dir'] == UPRIGHT:
+          bounce = randBounce()
+          ball['rect'].left += MOVESPEED
+          ball['rect'].top -= bounce
+     if ball['dir'] == UPLEFT:
+          bounce = randBounce()
+          ball['rect'].left -= MOVESPEED
+          ball['rect'].top -= bounce
+     if ball['dir'] == DOWNRIGHT:
+          bounce = randBounce()
+          ball['rect'].left += MOVESPEED
+          ball['rect'].top += bounce
+     if ball['dir'] == DOWNLEFT:
+          bounce = randBounce()
+          ball['rect'].left -= MOVESPEED
+          ball['rect'].top += bounce
      
-     
-
-
-       
+     if ball['rect'].left < 0:
+          ball['rect'].left = 390
+          ball['rect'].top = 190
+          direction = ballDirection()
+          if direction == 1:
+               ballLeft = True
+          elif direction == 0:
+               ballLeft = False
+          if ballLeft == True:
+               ball['dir'] = LEFT
+          elif ballLeft == False:
+               ball['dir'] = RIGHT
+               
+     if ball['rect'].left > WINDOWWIDTH:
+          ball['rect'].left = 390
+          ball['rect'].top = 190
+          direction = ballDirection()
+          if direction == 1:
+               ballLeft = True
+          elif direction == 0:
+               ballLeft = False
+          if ballLeft == True:
+               ball['dir'] = LEFT
+          elif ballLeft == False:
+               ball['dir'] = RIGHT
+               
+     if paddleComp.bottom < WINDOWHEIGHT or paddleComp.top > 0:
+          paddleComp.centery = ball['rect'].centery 
 
      pygame.draw.rect(windowSurface, WHITE, paddlePlayer)
      pygame.draw.rect(windowSurface, WHITE, paddleComp)
