@@ -14,7 +14,7 @@ def randBounce():
      return bounceSpeed
 
 def randSpeed():
-     speed = random.randint(-1, 6)
+     speed = random.randint(-2, 7)
      return speed
 
 
@@ -22,16 +22,16 @@ pygame.init()
 mainClock = pygame.time.Clock()
 
 WINDOWWIDTH = 800
-WINDOWHEIGHT = 400
+WINDOWHEIGHT = 500
 windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
 pygame.display.set_caption('pong')
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
-ball = {'rect':pygame.Rect(390, 190, 20, 20),'dir':None}
-paddlePlayer= pygame.Rect(50, 120, 20, 150)
-paddleComp = pygame.Rect(700, 120, 20, 150)
+ball = {'rect':pygame.Rect(390, 240, 20, 20),'dir':None}
+paddlePlayer= pygame.Rect(40, 185, 20, 130)
+paddleComp = pygame.Rect(740, 185, 20, 130)
 
 moveUp = False
 moveDown = False
@@ -44,9 +44,9 @@ DOWNLEFT = 1
 UPRIGHT = 9
 DOWNRIGHT = 3
 
-MOVESPEED = 6
+MOVESPEED = 9
 
-BALLSPEED = 10
+BALLSPEED = 13
 
 bounce = None
 
@@ -69,10 +69,10 @@ while True:
              pygame.quit()
              sys.exit()
          if event.type == KEYDOWN:
-             if event.type == K_UP or event.key == ord('w'):
+             if event.key == K_UP or event.key == ord('w'):
                  moveUp = True
                  moveDown = False
-             if event.type == K_DOWN or event.key == ord('s'):
+             if event.key == K_DOWN or event.key == ord('s'):
                  moveUp = False
                  moveDown = True
 
@@ -94,10 +94,18 @@ while True:
         
      
      if ball['rect'].colliderect(paddlePlayer):
-          ball['dir'] = UPRIGHT
+          direct = ballDirection()
+          if direct == 0:   
+               ball['dir'] = UPRIGHT
+          elif direct == 1:
+               ball['dir'] = DOWNRIGHT
 
      if ball['rect'].colliderect(paddleComp):
-          ball['dir'] = DOWNLEFT
+          directTwo = ballDirection()
+          if directTwo == 0:
+               ball['dir'] = UPLEFT
+          elif directTwo == 1:
+               ball['dir'] = DOWNLEFT
           
      if ball['rect'].top < 0:
           if ball['dir'] == UPLEFT:
@@ -165,8 +173,8 @@ while True:
           if paddleComp.centery > ball['rect'].centery:
                speedTwo = randSpeed()
                paddleComp.centery -= speedTwo
-     print(speed)
 
+     pygame.draw.line(windowSurface, WHITE, (400, 0),(400, WINDOWHEIGHT), 1)
      pygame.draw.rect(windowSurface, WHITE, paddlePlayer)
      pygame.draw.rect(windowSurface, WHITE, paddleComp)
      pygame.draw.rect(windowSurface, WHITE, ball['rect'])
