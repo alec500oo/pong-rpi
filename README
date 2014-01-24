@@ -7,7 +7,7 @@ build instructions:
 
 -in the terminal cd to the directory with the pong.py file
 
--type (without parentheses) "python3 pong.py"
+-type (without quotations) "python3 pong.py"
 
 -HAVE FUN
 
