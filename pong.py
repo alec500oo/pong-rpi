@@ -1,5 +1,14 @@
-#pong game ver. Alpha 0.02
-#Alec Matthews
+# TITLE: pong.py
+#
+# Language: python3
+# 
+# Dependency: pygame, use pip3 install pygame
+# 
+# Run: python3 pong.py
+#
+# Author: Alec Matthews
+# 
+# Date: 10/01/17
 
 import pygame, sys, random
 from pygame.locals import*
